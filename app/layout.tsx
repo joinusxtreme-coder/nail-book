@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Link from 'next/link';
+import AuthNav from '@/components/AuthNav';
 
 export const metadata: Metadata = {
   title: 'nail book — ネイリスト予約・売上管理',
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/menus" className="text-gray-600 hover:text-pink-500">メニュー</Link>
               <Link href="/sales" className="text-gray-600 hover:text-pink-500">売上</Link>
             </nav>
+            <AuthNav />
           </div>
         </header>
         <main className="max-w-4xl mx-auto px-4 py-6">{children}</main>

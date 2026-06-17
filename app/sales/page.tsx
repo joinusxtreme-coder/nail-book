@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { useSubscription } from '@/lib/useSubscription';
 
 interface Sale {
   id: string;
@@ -12,6 +14,7 @@ interface Sale {
 }
 
 export default function SalesPage() {
+  const { isPro, loading: subLoading } = useSubscription();
   const [sales, setSales] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState(() => {
@@ -49,6 +52,19 @@ export default function SalesPage() {
     menuStats[name].revenue += s.price ?? s.nail_menus?.price ?? 0;
   });
   const menuRanking = Object.entries(menuStats).sort((a, b) => b[1].revenue - a[1].revenue);
+
+  if (!subLoading && !isPro) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 space-y-4 text-center">
+        <p className="text-4xl">🔒</p>
+        <h2 className="text-lg font-bold text-gray-800">売上レポートはProプランの機能です</h2>
+        <p className="text-sm text-gray-500">月額¥980でデータ分析・売上管理が使い放題</p>
+        <Link href="/pricing" className="bg-pink-500 hover:bg-pink-600 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors">
+          Proプランを見る →
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
