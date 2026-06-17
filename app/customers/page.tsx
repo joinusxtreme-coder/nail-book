@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import AuthGuard from '@/components/AuthGuard';
 
 interface Customer { id: string; name: string; phone: string | null; email: string | null; memo: string | null; created_at: string; }
 
-export default function CustomersPage() {
+function CustomersInner() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -100,6 +102,7 @@ export default function CustomersPage() {
                   <p className="text-xs text-gray-400">{[c.phone, c.email].filter(Boolean).join(' · ') || '連絡先未登録'}</p>
                 </div>
                 <div className="flex gap-3">
+                  <Link href={`/customers/${c.id}`} className="text-xs text-pink-500 hover:underline">詳細</Link>
                   <button onClick={() => openEdit(c)} className="text-xs text-blue-500 hover:underline">編集</button>
                   <button onClick={() => handleDelete(c.id)} className="text-xs text-red-400 hover:underline">削除</button>
                 </div>
@@ -110,4 +113,8 @@ export default function CustomersPage() {
       </div>
     </div>
   );
+}
+
+export default function CustomersPage() {
+  return <AuthGuard><CustomersInner /></AuthGuard>;
 }

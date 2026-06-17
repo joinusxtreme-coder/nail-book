@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import AuthGuard from '@/components/AuthGuard';
 
 interface Customer { id: string; name: string; }
 interface NailMenu { id: string; name: string; price: number; duration_min: number; }
 
-export default function NewAppointmentPage() {
+function NewAppointmentInner() {
   const router = useRouter();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [menus, setMenus] = useState<NailMenu[]>([]);
@@ -114,4 +115,8 @@ export default function NewAppointmentPage() {
       </div>
     </div>
   );
+}
+
+export default function NewAppointmentPage() {
+  return <AuthGuard><NewAppointmentInner /></AuthGuard>;
 }

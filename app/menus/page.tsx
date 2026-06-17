@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import AuthGuard from '@/components/AuthGuard';
 
 interface NailMenu { id: string; name: string; category: string; price: number; duration_min: number; }
 
 const CATEGORIES = ['ジェルネイル', 'スカルプ', 'ケア・オフ', 'アート', 'オプション', 'その他'];
 
-export default function MenusPage() {
+function MenusInner() {
   const [menus, setMenus] = useState<NailMenu[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -122,4 +123,8 @@ export default function MenusPage() {
       </div>
     </div>
   );
+}
+
+export default function MenusPage() {
+  return <AuthGuard><MenusInner /></AuthGuard>;
 }

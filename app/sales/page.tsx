@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useSubscription } from '@/lib/useSubscription';
+import AuthGuard from '@/components/AuthGuard';
 
 interface Sale {
   id: string;
@@ -13,7 +14,7 @@ interface Sale {
   nail_menus: { name: string; price: number } | null;
 }
 
-export default function SalesPage() {
+function SalesInner() {
   const { isPro, loading: subLoading } = useSubscription();
   const [sales, setSales] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,4 +135,8 @@ export default function SalesPage() {
       </div>
     </div>
   );
+}
+
+export default function SalesPage() {
+  return <AuthGuard><SalesInner /></AuthGuard>;
 }
